@@ -126,7 +126,7 @@ def transform_data(df: pd.DataFrame) -> pd.DataFrame:
 
 if __name__ == "__main__":
 
-    from extract import extract_data
+    from etl.extract import extract_data
 
     df = extract_data("data/raw/SuperStoreOrders.csv")
 

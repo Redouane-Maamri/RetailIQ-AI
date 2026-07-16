@@ -153,7 +153,7 @@ def print_validation_report(report: dict):
 
 if __name__ == "__main__":
 
-    from extract import extract_data
+    from etl.extract import extract_data
 
     df = extract_data("data/raw/SuperStoreOrders.csv")
 
