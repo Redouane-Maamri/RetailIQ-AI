@@ -256,36 +256,33 @@ def load_order_items(df: pd.DataFrame):
 
     print(f"Order Items Loaded : {len(order_items)}")
 
+def load_data(df: pd.DataFrame):
+
+    clear_database()
+
+    customer_lookup = load_customers(df)
+
+    location_lookup = load_locations(df)
+
+    load_products(df)
+
+    load_orders(
+        df,
+        customer_lookup,
+        location_lookup
+    )
+
+    load_order_items(df)
+
+    print("\nLoading completed successfully! ✅")
+
 if __name__ == "__main__":
 
     from etl.extract import extract_data
     from etl.transform import transform_data
 
     df = extract_data("data/raw/SuperStoreOrders.csv")
+
     df = transform_data(df)
 
-    clear_database()
-
-customer_lookup = load_customers(df)
-
-location_lookup = load_locations(df)
-
-load_products(df)
-
-load_orders(
-    df,
-    customer_lookup,
-    location_lookup
-)
-
-load_order_items(df)
-
-print()
-
-print("Customer Lookup Example:")
-print(list(customer_lookup.items())[:5])
-
-print()
-
-print("Location Lookup Example:")
-print(list(location_lookup.items())[:5])
+    load_data(df)
