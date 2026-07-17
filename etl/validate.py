@@ -28,6 +28,33 @@ REQUIRED_COLUMNS = [
     "year",
 ]
 
+# ==========================================================
+# Critical Columns
+# Missing values in these columns STOP the ETL pipeline.
+# ==========================================================
+
+CRITICAL_COLUMNS = [
+    "order_id",
+    "customer_name",
+    "product_id",
+    "sales",
+    "quantity",
+]
+
+# ==========================================================
+# Non-Critical Columns
+# Missing values will be automatically handled during
+# the Transform phase.
+# ==========================================================
+
+NON_CRITICAL_COLUMNS = [
+    "ship_mode",
+    "discount",
+    "profit",
+    "shipping_cost",
+    "order_priority",
+]
+
 
 # ==========================================================
 # Validation Functions
@@ -35,21 +62,48 @@ REQUIRED_COLUMNS = [
 
 def check_required_columns(df: pd.DataFrame) -> list:
     """
-    Check if all required columns exist.
-    Returns a list of missing columns.
+    Check whether all required columns exist.
     """
 
     return [col for col in REQUIRED_COLUMNS if col not in df.columns]
 
 
-def check_missing_values(df: pd.DataFrame) -> dict:
+def check_critical_missing_values(df: pd.DataFrame) -> dict:
     """
-    Returns only columns containing missing values.
+    Returns missing values only for critical columns.
     """
 
-    missing = df.isnull().sum()
+    missing = {}
 
-    return missing[missing > 0].to_dict()
+    for column in CRITICAL_COLUMNS:
+
+        if column in df.columns:
+
+            count = int(df[column].isnull().sum())
+
+            if count > 0:
+                missing[column] = count
+
+    return missing
+
+
+def check_non_critical_missing_values(df: pd.DataFrame) -> dict:
+    """
+    Returns missing values only for non-critical columns.
+    """
+
+    missing = {}
+
+    for column in NON_CRITICAL_COLUMNS:
+
+        if column in df.columns:
+
+            count = int(df[column].isnull().sum())
+
+            if count > 0:
+                missing[column] = count
+
+    return missing
 
 
 def check_duplicate_rows(df: pd.DataFrame) -> int:
@@ -68,32 +122,64 @@ def check_empty_dataset(df: pd.DataFrame) -> bool:
     return df.empty
 
 
+# ==========================================================
+# Validation Report
+# ==========================================================
+
 def generate_validation_report(df: pd.DataFrame) -> dict:
     """
     Generate a complete validation report.
     """
 
     missing_columns = check_required_columns(df)
-    missing_values = check_missing_values(df)
+
+    critical_missing_values = check_critical_missing_values(df)
+
+    non_critical_missing_values = check_non_critical_missing_values(df)
+
     duplicate_rows = check_duplicate_rows(df)
+
     empty_dataset = check_empty_dataset(df)
 
-    status = (
-        len(missing_columns) == 0
-        and len(missing_values) == 0
-        and duplicate_rows == 0
-        and not empty_dataset
+    # Fatal errors
+
+    has_fatal_errors = (
+        len(missing_columns) > 0
+        or len(critical_missing_values) > 0
+        or empty_dataset
     )
+
+    # Warnings
+
+    has_warnings = (
+        duplicate_rows > 0
+        or len(non_critical_missing_values) > 0
+    )
+
+    if has_fatal_errors:
+        status = "INVALID"
+
+    elif has_warnings:
+        status = "VALID_WITH_WARNINGS"
+
+    else:
+        status = "VALID"
 
     report = {
         "rows": len(df),
         "columns": len(df.columns),
+
         "required_columns": len(missing_columns) == 0,
         "missing_columns": missing_columns,
-        "missing_values": missing_values,
+
+        "critical_missing_values": critical_missing_values,
+        "non_critical_missing_values": non_critical_missing_values,
+
         "duplicate_rows": duplicate_rows,
+
         "empty_dataset": empty_dataset,
-        "status": "VALID" if status else "INVALID",
+
+        "status": status,
     }
 
     return report
@@ -108,9 +194,9 @@ def print_validation_report(report: dict):
     Print a professional validation report.
     """
 
-    print("=" * 65)
-    print("               RetailIQ AI - Validation Report")
-    print("=" * 65)
+    print("=" * 70)
+    print("              RetailIQ AI - Validation Report")
+    print("=" * 70)
 
     print(f"Rows                 : {report['rows']}")
     print(f"Columns              : {report['columns']}")
@@ -119,32 +205,53 @@ def print_validation_report(report: dict):
         f"Required Columns     : {'✅ PASS' if report['required_columns'] else '❌ FAIL'}"
     )
 
-    print(
-        f"Duplicate Rows       : {report['duplicate_rows']}"
-    )
+    print(f"Duplicate Rows       : {report['duplicate_rows']}")
 
     print(
         f"Dataset Empty        : {'Yes' if report['empty_dataset'] else 'No'}"
     )
 
+    # Missing required columns
+
     if report["missing_columns"]:
-        print("\nMissing Columns:")
+
+        print("\n❌ Missing Required Columns:")
+
         for column in report["missing_columns"]:
             print(f"   - {column}")
 
-    if report["missing_values"]:
-        print("\nMissing Values:")
-        for column, count in report["missing_values"].items():
+    # Critical missing values
+
+    if report["critical_missing_values"]:
+
+        print("\n❌ Critical Missing Values:")
+
+        for column, count in report["critical_missing_values"].items():
             print(f"   - {column}: {count}")
+
+    # Non-critical missing values
+
+    if report["non_critical_missing_values"]:
+
+        print("\n⚠️ Non-Critical Missing Values:")
+
+        for column, count in report["non_critical_missing_values"].items():
+            print(f"   - {column}: {count}")
+
+        print("   These values will be handled automatically during transformation.")
 
     print("\nStatus               :", end=" ")
 
     if report["status"] == "VALID":
         print("✅ VALID")
+
+    elif report["status"] == "VALID_WITH_WARNINGS":
+        print("⚠️ VALID WITH WARNINGS")
+
     else:
         print("❌ INVALID")
 
-    print("=" * 65)
+    print("=" * 70)
 
 
 # ==========================================================
