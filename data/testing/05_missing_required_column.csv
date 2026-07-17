@@ -1,0 +1,21 @@
+order_id,order_date,ship_date,ship_mode,customer_name,segment,state,country,market,region,product_id,category,sub_category,product_name,sales,quantity,discount,profit,order_priority,year
+AG-2011-2040,1/1/2011,6/1/2011,Standard Class,Toby Braunhardt,Consumer,Constantine,Algeria,Africa,Africa,OFF-TEN-10000025,Office Supplies,Storage,"Tenex Lockers, Blue",408,2,0.0,106.14,Medium,2011
+IN-2011-47883,1/1/2011,8/1/2011,Standard Class,Joseph Holt,Consumer,New South Wales,Australia,APAC,Oceania,OFF-SU-10000618,Office Supplies,Supplies,"Acme Trimmer, High Speed",120,3,0.1,36.036,Medium,2011
+HU-2011-1220,1/1/2011,5/1/2011,Second Class,Annie Thurman,Consumer,Budapest,Hungary,EMEA,EMEA,OFF-TEN-10001585,Office Supplies,Storage,"Tenex Box, Single Width",66,4,0.0,29.64,High,2011
+IT-2011-3647632,1/1/2011,5/1/2011,Second Class,Eugene Moren,Home Office,Stockholm,Sweden,EU,North,OFF-PA-10001492,Office Supplies,Paper,"Enermax Note Cards, Premium",45,3,0.5,-26.055,High,2011
+IN-2011-47883,1/1/2011,8/1/2011,Standard Class,Joseph Holt,Consumer,New South Wales,Australia,APAC,Oceania,FUR-FU-10003447,Furniture,Furnishings,"Eldon Light Bulb, Duo Pack",114,5,0.1,37.77,Medium,2011
+IN-2011-47883,1/1/2011,8/1/2011,Standard Class,Joseph Holt,Consumer,New South Wales,Australia,APAC,Oceania,OFF-PA-10001968,Office Supplies,Paper,"Eaton Computer Printout Paper, 8.5 x 11",55,2,0.1,15.342,Medium,2011
+CA-2011-1510,2/1/2011,6/1/2011,Standard Class,Magdelene Morse,Consumer,Ontario,Canada,Canada,Canada,TEC-OKI-10002750,Technology,Machines,"Okidata Inkjet, Wireless",314,1,0.0,3.12,Medium,2011
+IN-2011-79397,3/1/2011,3/1/2011,Same Day,Kean Nguyen,Corporate,New South Wales,Australia,APAC,Oceania,OFF-AP-10000304,Office Supplies,Appliances,"Hoover Microwave, White",276,1,0.1,110.412,Critical,2011
+ID-2011-80230,3/1/2011,9/1/2011,Standard Class,Ken Lonsdale,Consumer,Auckland,New Zealand,APAC,Oceania,TEC-CO-10004182,Technology,Copiers,"Hewlett Wireless Fax, Laser",912,4,0.4,-319.464,Low,2011
+IZ-2011-4680,3/1/2011,7/1/2011,Standard Class,Lindsay Williams,Corporate,Ninawa,Iraq,EMEA,EMEA,FUR-NOV-10002791,Furniture,Chairs,"Novimex Swivel Stool, Set of Two",667,4,0.0,253.32,High,2011
+IN-2011-65159,3/1/2011,7/1/2011,Second Class,Larry Blacks,Consumer,National Capital,Philippines,APAC,Southeast Asia,OFF-ST-10003020,Office Supplies,Storage,"Tenex Lockers, Industrial",338,3,0.45,-122.8005,High,2011
+IN-2011-65159,3/1/2011,7/1/2011,Second Class,Larry Blacks,Consumer,National Capital,Philippines,APAC,Southeast Asia,FUR-TA-10002797,Furniture,Tables,"Chromcraft Round Table, Adjustable Height",211,1,0.55,-70.3995,High,2011
+ES-2011-4869686,3/1/2011,7/1/2011,Standard Class,Dorothy Dickinson,Consumer,England,United Kingdom,EU,North,FUR-BO-10000728,Furniture,Bookcases,"Dania Corner Shelving, Traditional",854,7,0.0,290.43,Medium,2011
+IN-2011-33652,3/1/2011,9/1/2011,Standard Class,Dennis Pardue,Home Office,Sarawak,Malaysia,APAC,Southeast Asia,TEC-CO-10000594,Technology,Copiers,"Hewlett Fax and Copier, Laser",193,1,0.0,50.13,Medium,2011
+ID-2011-80230,3/1/2011,9/1/2011,Standard Class,Ken Lonsdale,Consumer,Auckland,New Zealand,APAC,Oceania,FUR-CH-10000214,Furniture,Chairs,"Hon Rocking Chair, Set of Two",159,2,0.4,-95.676,Low,2011
+MX-2011-160234,3/1/2011,7/1/2011,Standard Class,Stewart Visinsky,Consumer,Guatemala,Guatemala,LATAM,Central,TEC-PH-10002647,Technology,Phones,"Nokia Headset, VoIP",195,4,0.0,44.88,Medium,2011
+IR-2011-770,3/1/2011,7/1/2011,Standard Class,Jas O'Carroll,Consumer,Yazd,Iran,EMEA,EMEA,OFF-BRE-10003081,Office Supplies,Appliances,"Breville Coffee Grinder, Black",123,2,0.0,42.9,Medium,2011
+ID-2011-80230,3/1/2011,9/1/2011,Standard Class,Ken Lonsdale,Consumer,Auckland,New Zealand,APAC,Oceania,TEC-AC-10002881,Technology,Accessories,"Belkin Numeric Keypad, Bluetooth",69,2,0.4,3.42,Low,2011
+ID-2011-80230,3/1/2011,9/1/2011,Standard Class,Ken Lonsdale,Consumer,Auckland,New Zealand,APAC,Oceania,FUR-CH-10000666,Furniture,Chairs,"SAFCO Chairmat, Black",69,2,0.4,-26.412,Low,2011
+ID-2011-12596,3/1/2011,8/1/2011,Standard Class,Chris McAfee,Consumer,Nakhon Ratchasima,Thailand,APAC,Southeast Asia,OFF-ST-10002066,Office Supplies,Storage,"Smead File Cart, Blue",135,2,0.47,-45.9018,Medium,2011
