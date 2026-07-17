@@ -43,8 +43,8 @@ CRITICAL_COLUMNS = [
 
 # ==========================================================
 # Non-Critical Columns
-# Missing values will be automatically handled during
-# the Transform phase.
+# Missing values will be automatically handled
+# during the Transform phase.
 # ==========================================================
 
 NON_CRITICAL_COLUMNS = [
@@ -54,7 +54,6 @@ NON_CRITICAL_COLUMNS = [
     "shipping_cost",
     "order_priority",
 ]
-
 
 # ==========================================================
 # Validation Functions
@@ -70,7 +69,7 @@ def check_required_columns(df: pd.DataFrame) -> list:
 
 def check_critical_missing_values(df: pd.DataFrame) -> dict:
     """
-    Returns missing values only for critical columns.
+    Return missing values only for critical columns.
     """
 
     missing = {}
@@ -89,7 +88,7 @@ def check_critical_missing_values(df: pd.DataFrame) -> dict:
 
 def check_non_critical_missing_values(df: pd.DataFrame) -> dict:
     """
-    Returns missing values only for non-critical columns.
+    Return missing values only for non-critical columns.
     """
 
     missing = {}
@@ -106,12 +105,17 @@ def check_non_critical_missing_values(df: pd.DataFrame) -> dict:
     return missing
 
 
-def check_duplicate_rows(df: pd.DataFrame) -> int:
+def check_duplicate_rows(df: pd.DataFrame) -> dict:
     """
-    Count duplicate rows.
+    Count duplicate rows and return their indexes.
     """
 
-    return int(df.duplicated().sum())
+    duplicate_indexes = df[df.duplicated()].index.tolist()
+
+    return {
+        "count": len(duplicate_indexes),
+        "indexes": duplicate_indexes,
+    }
 
 
 def check_empty_dataset(df: pd.DataFrame) -> bool:
@@ -137,11 +141,13 @@ def generate_validation_report(df: pd.DataFrame) -> dict:
 
     non_critical_missing_values = check_non_critical_missing_values(df)
 
-    duplicate_rows = check_duplicate_rows(df)
+    duplicate_report = check_duplicate_rows(df)
 
     empty_dataset = check_empty_dataset(df)
 
-    # Fatal errors
+    # ------------------------------------------------------
+    # Fatal Errors
+    # ------------------------------------------------------
 
     has_fatal_errors = (
         len(missing_columns) > 0
@@ -149,33 +155,52 @@ def generate_validation_report(df: pd.DataFrame) -> dict:
         or empty_dataset
     )
 
+    # ------------------------------------------------------
     # Warnings
+    # ------------------------------------------------------
 
     has_warnings = (
-        duplicate_rows > 0
+        duplicate_report["count"] > 0
         or len(non_critical_missing_values) > 0
     )
 
+    # ------------------------------------------------------
+    # Validation Status
+    # ------------------------------------------------------
+
     if has_fatal_errors:
+
         status = "INVALID"
 
     elif has_warnings:
+
         status = "VALID_WITH_WARNINGS"
 
     else:
+
         status = "VALID"
 
+    # ------------------------------------------------------
+    # Report
+    # ------------------------------------------------------
+
     report = {
+
         "rows": len(df),
+
         "columns": len(df.columns),
 
         "required_columns": len(missing_columns) == 0,
+
         "missing_columns": missing_columns,
 
         "critical_missing_values": critical_missing_values,
+
         "non_critical_missing_values": non_critical_missing_values,
 
-        "duplicate_rows": duplicate_rows,
+        "duplicate_rows": duplicate_report["count"],
+
+        "duplicate_indexes": duplicate_report["indexes"],
 
         "empty_dataset": empty_dataset,
 
@@ -211,44 +236,74 @@ def print_validation_report(report: dict):
         f"Dataset Empty        : {'Yes' if report['empty_dataset'] else 'No'}"
     )
 
-    # Missing required columns
+    # ------------------------------------------------------
+    # Missing Required Columns
+    # ------------------------------------------------------
 
     if report["missing_columns"]:
 
         print("\n❌ Missing Required Columns:")
 
         for column in report["missing_columns"]:
+
             print(f"   - {column}")
 
-    # Critical missing values
+    # ------------------------------------------------------
+    # Critical Missing Values
+    # ------------------------------------------------------
 
     if report["critical_missing_values"]:
 
         print("\n❌ Critical Missing Values:")
 
         for column, count in report["critical_missing_values"].items():
+
             print(f"   - {column}: {count}")
 
-    # Non-critical missing values
+    # ------------------------------------------------------
+    # Non-Critical Missing Values
+    # ------------------------------------------------------
 
     if report["non_critical_missing_values"]:
 
         print("\n⚠️ Non-Critical Missing Values:")
 
         for column, count in report["non_critical_missing_values"].items():
+
             print(f"   - {column}: {count}")
 
-        print("   These values will be handled automatically during transformation.")
+        print("   These values will be filled automatically during transformation.")
+
+    # ------------------------------------------------------
+    # Duplicate Rows
+    # ------------------------------------------------------
+
+    if report["duplicate_rows"] > 0:
+
+        print("\n⚠️ Duplicate Rows Found:")
+
+        print(f"   Total : {report['duplicate_rows']}")
+
+        print(f"   Indexes : {report['duplicate_indexes']}")
+
+        print("   These duplicate rows will be removed automatically during transformation.")
+
+    # ------------------------------------------------------
+    # Final Status
+    # ------------------------------------------------------
 
     print("\nStatus               :", end=" ")
 
     if report["status"] == "VALID":
+
         print("✅ VALID")
 
     elif report["status"] == "VALID_WITH_WARNINGS":
+
         print("⚠️ VALID WITH WARNINGS")
 
     else:
+
         print("❌ INVALID")
 
     print("=" * 70)
