@@ -5,12 +5,11 @@ from database.connection import get_engine
 
 def load_dashboard_data():
     """
-    Load the complete analytical dataset for the dashboard.
+    Load the complete analytical dataset.
     """
 
     query = """
     SELECT
-
         o.order_id,
         o.order_date,
         o.ship_date,
@@ -55,4 +54,10 @@ def load_dashboard_data():
     ORDER BY o.order_date;
     """
 
-    return pd.read_sql(query, get_engine())
+    df = pd.read_sql(query, get_engine())
+
+    # Convert dates
+    df["order_date"] = pd.to_datetime(df["order_date"].astype(str))
+    df["ship_date"] = pd.to_datetime(df["ship_date"].astype(str))
+
+    return df
